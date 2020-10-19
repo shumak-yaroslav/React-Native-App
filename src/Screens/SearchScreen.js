@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, Button, FlatList, Alert, TextInput, Keyboard } from 'react-native'
+import { View, Text, StyleSheet, Button, FlatList, Alert, TextInput, Keyboard, Picker } from 'react-native'
 import { THEME } from "../theme";
 import { useDispatch, useSelector } from 'react-redux'
 import { searchPost, searchPostByStatus } from "../store/actions/post";
@@ -7,7 +7,7 @@ import { Post } from "../Components/Post";
 
 export const SearchScreen = ({ navigation }) => {
     const [text, setText] = useState('')
-    const [status, setStatus] = useState('')
+    const [status, setStatus] = useState('done')
     const [searchType, setSearchType] = useState(0)
 
     const dispatch = useDispatch()
@@ -53,12 +53,16 @@ export const SearchScreen = ({ navigation }) => {
                 onChangeText={setText}
             />
             <Button title='Search by title' color={THEME.MAIN_COLOR} onPress={searchHandler}/>
-            <TextInput
+            <Picker
+                selectedValue={status}
                 style={styles.input}
-                placeholder='Enter status of task'
-                value={status}
-                onChangeText={setStatus}
-            />
+                onValueChange={(itemValue, itemIndex) => setStatus(itemValue)}
+                mode='dropdown'
+            >
+                <Picker.Item label="Done" value="done" />
+                <Picker.Item label="inProgress" value="inProgress" />
+                <Picker.Item label="Expired" value="expired" />
+            </Picker>
             <Button title='Search by status' color={THEME.MAIN_COLOR} onPress={searchByStatusHandler}/>
                 <FlatList
                     style={styles.wrap}
